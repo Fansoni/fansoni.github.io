@@ -44,9 +44,7 @@
     <script>
         function filesName() {
             return [
-                "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
-                "assets/img/hero-bg.jpg",
-                "assets/img/profile-img.jpg",
+                "assets/img/tis_outdoor.png",
             ];
         }
 
@@ -91,13 +89,13 @@
                         if(child.tagName === "IMG"){
                             setTimeout(() => {
                                 currentIndex = (currentIndex + 1) % files.length;
-                                child.style.opacity = 0;
+                                if(files.length > 1) child.style.opacity = 0;
                             }, 10000);
                         }else{
                             child.play();
                             child.onended = function () {
                                 currentIndex = (currentIndex + 1) % files.length;
-                                child.style.opacity = 0;
+                                if(files.length > 1) child.style.opacity = 0;
                             };
                         }
                     }
