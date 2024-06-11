@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            object-fit: fill;
+            transition: all 1.2s linear;
+            z-index: -10;
+        }
+
+        .videos {
+            opacity: 0;
+        }
+
+        .imagens {
+            opacity: 0;
+            transition: opacity 2s;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            object-fit: fill;
+            z-index: -10;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container"></div>
+
+    <script>
+        function filesName() {
+            return [
+                "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
+                "assets/img/hero-bg.jpg",
+                "assets/img/profile-img.jpg",
+            ];
+        }
+
+        function getFileType(fileName) {
+            const extension = fileName.split(".").pop();
+            return extension;
+        }
+
+        function checkIfImage(fileName) {
+            return (
+                getFileType(fileName) === "png" ||
+                getFileType(fileName) === "jpg" ||
+                getFileType(fileName) === "jpeg" ||
+                getFileType(fileName) === "gif"
+            );
+        }
+
+        function checkIfVideo(fileName) {
+            return getFileType(fileName) === "mp4";
+        }
+
+        window.onload = function () {
+            let files = filesName();
+
+            for (let i = 0; i < files.length; i++) {
+                if (checkIfImage(files[i])) {
+                    document.getElementsByClassName("container")[0].innerHTML += `<img src="${files[i]}" class="imagens" id="file_${[i]}" />`;
+                } else if (checkIfVideo(files[i])) {
+                    document.getElementsByClassName("container")[0].innerHTML += `<video muted autoplay id="file_${[i]}" class="videos"><source src="${files[i]
+                        }" type="video/mp4"/></video>`;
+                }
+            }
+
+            var currentIndex = 0;
+
+            var parent = document.getElementsByClassName("container")[0];
+            setInterval(() => {
+                let child = parent.children[currentIndex];
+                if (child) {
+                    if(child.style.opacity !== "1"){
+                        child.style.opacity = 1;
+                        if(child.tagName === "IMG"){
+                            setTimeout(() => {
+                                currentIndex = (currentIndex + 1) % files.length;
+                                child.style.opacity = 0;
+                            }, 10000);
+                        }else{
+                            child.play();
+                            child.onended = function () {
+                                currentIndex = (currentIndex + 1) % files.length;
+                                child.style.opacity = 0;
+                            };
+                        }
+                    }
+                }else{
+                    currentIndex = 0;
+                }
+            }, 1000);
+        };
+    </script>
+</body>
+
+</html>
